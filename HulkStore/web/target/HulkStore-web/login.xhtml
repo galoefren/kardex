@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">Kardex</ui:define>
+		<h:form id="frmLogin">
+			<div align="center">
+				<div style="width: 40%; text-align: left">
+					<p:panel>
+						<f:facet name="header">
+							<h1>
+							Bienvenido al sistema Kardex
+							</h1>
+							<h3>
+							Introduzca su nombre de usuario y contrase&#241;a
+							</h3>
+						</f:facet>
+						<h:panelGroup id="pnLogin">
+							<h:panelGroup>
+								<br />
+								<h:panelGrid columns="2" columnClasses="width20,width40">
+									<h:panelGroup>
+										<b>
+											<h:outputLabel for="identificacion"
+												value="Nombre de usuario: "
+												style="margin-right: 10px" />
+										</b>
+									</h:panelGroup>
+									<h:panelGroup>
+										<p:inputText id="identificacion" styleClass="form-control"
+											value="#{loginControlador.usuario}" maxlength="255"
+											required="true" requiredMessage="Campo obligatorio">
+											<p:ajax update="msmIdentificacion"></p:ajax>
+										</p:inputText>
+										<p:message id="msmIdentificacion" for="identificacion"
+											style="margin-top:5px;margin-bottom:5px;text-align:left" />
+									</h:panelGroup>
+
+									<h:panelGroup>
+										<b>
+											<p:outputLabel for="password" value="Contrase&#241;a: "
+												style="margin-right: 10px" />
+										</b>
+									</h:panelGroup>
+									<h:panelGroup>
+										<p:password id="password" styleClass="form-control"
+											value="#{loginControlador.password}" maxlength="255"
+											required="true" requiredMessage="Campo obligatorio">
+											<p:ajax update="msmPassword"></p:ajax>
+										</p:password>
+										<p:message id="msmPassword" for="password"
+											style="margin-top:5px;margin-bottom:5px;text-align:left" />
+									</h:panelGroup>
+								</h:panelGrid>
+								<br />
+								<div style="width: 100%;" align="center">
+									<p:commandButton id="btnLogin"
+										action="#{loginControlador.login()}"	
+										value="Iniciar Sesi&#243;n" update="pnLogin">
+									</p:commandButton>
+									<p:commandButton id="btnBorrarCampos"
+										action="#{loginControlador.borrarCampos()}"
+										value="Borrar Campos" update="pnLogin"
+										style="margin-left: 10px">
+									</p:commandButton>
+									<br />
+									<h:panelGrid columns="1"
+										style="padding-top:3px; text-align:justify">
+										<p:messages for="btnLogin" />
+									</h:panelGrid>
+									<br />
+								</div>
+							</h:panelGroup>
+						</h:panelGroup>
+					</p:panel>
+				</div>
+				<br /><br /> 
+			</div>
+		</h:form>
+
+
+</ui:composition>

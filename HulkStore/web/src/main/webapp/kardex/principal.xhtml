@@ -1,0 +1,173 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:head>
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/estilo.css" />
+	</h:head>
+	<ui:define name="titulo">
+        ¡Bienvenidos al Sistema de Gestión de Ofertas Extraordinarias!
+    </ui:define>
+
+	<h:form id="frmLogin">
+		<div align="center">
+			<div style="width: 80%; text-align: left">
+				<p:panel>
+					<f:facet name="header">
+						<h1>Bienvenido al Sistema de Inventario Kardex</h1>
+						<h3>USUARIO:</h3>
+						<h3>
+							<p:outputLabel value="#{principalControlador.nombreUsuario}"></p:outputLabel>
+						</h3>
+					</f:facet>
+					<h:form id="frmForm">
+						<p:panel>
+							<f:facet name="header">Lista Productos</f:facet>
+							<br></br>
+							<p:messages id="messageProducto" />
+							<h:panelGrid id="pnlIngresoRegistro" columns="1" border="0">
+								<h:panelGroup style="display:block; text-align:center">
+									<p:commandButton value="Crear Item"
+										oncomplete="PF('popCrearProducto').show();" ajax="true" />
+								</h:panelGroup>
+								<p:dataTable id="tblProducto" var="producto"
+									value="#{principalControlador.listaProductos}"
+									scrollable="true" paginator="true" rows="10"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="5,10,15">
+
+									<p:column headerText="Código">
+										<h:outputText value="#{producto.codigo}" />
+									</p:column>
+									<p:column headerText="Nombre Item">
+										<h:outputText value="#{producto.nombreItem}" />
+									</p:column>
+									<p:column headerText="Cantidad">
+										<h:outputText value="#{producto.cantidad}" />
+									</p:column>
+									<p:column headerText="Categoria">
+										<h:outputText value="#{producto.tipoProducto.nombreItem}" />
+									</p:column>
+
+									<p:column headerText="Ubicacion">
+										<h:outputText value="#{producto.ubicacion}" />
+									</p:column>
+									<p:column headerText="Estado">
+										<h:outputText
+											value="#{(producto.estado==1) ? 'Activo' :'Inactivo'}" />
+									</p:column>
+									<p:column headerText="Editar">
+										<div style="text-align: center;">
+											<p:commandLink
+												actionListener="#{principalControlador.productoSeleccionadoEditar(producto)}"
+												oncomplete="PF('popGuardarProducto').show();" ajax="true">
+												<h:graphicImage value="../img/edit.png" />
+											</p:commandLink>
+										</div>
+									</p:column>
+									<p:column headerText="Activar">
+										<div style="text-align: center;">
+											<p:commandLink
+												actionListener="#{principalControlador.productoeleccionadoActivar(producto)}"
+												ajax="true">
+												<h:graphicImage value="../img/visto.png" />
+											</p:commandLink>
+										</div>
+									</p:column>
+									<p:column headerText="Inactivar">
+										<div style="text-align: center;">
+											<p:commandLink
+												actionListener="#{principalControlador.productoeleccionadoBorrar(producto)}"
+												ajax="true">
+												<h:graphicImage value="../img/delete.png" />
+											</p:commandLink>
+										</div>
+									</p:column>
+									<p:column headerText="Borrar">
+										<div style="text-align: center;">
+											<p:commandLink
+												actionListener="#{principalControlador.productoeleccionadoEliminar(producto)}"
+												ajax="true">
+												<h:graphicImage value="../img/eliminarIcon.png" />
+											</p:commandLink>
+										</div>
+									</p:column>
+									<f:facet name="paginatorBottomRight">
+										<p:commandButton type="button" icon="fa fa-sync" />
+									</f:facet>
+								</p:dataTable>
+							</h:panelGrid>
+						</p:panel>
+					</h:form>
+				</p:panel>
+			</div>
+		</div>
+	</h:form>
+
+
+	<h:form id="formCrearProducto">
+		<p:dialog header="Crear Producto" widgetVar="popCrearProducto"
+			resizable="false" autosized="false" width="400" height="350">
+			<div>
+				<h:panelGrid id="pnlNuevoRegistroProducto" columns="2"
+					cellpadding="5" cellspacing="1" border="0" rendered="true">
+					<h:outputText value=" Código: " />
+					<p:inputText id="inputTextCodigo"
+						value="#{principalControlador.codigoControlador}" required="true"
+						requiredMessage="El campo 'Código' está vacío" maxlength="25">
+						<p:keyFilter regEx="/^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ_-\s]+$/i"
+							preventPaste="false" />
+					</p:inputText>
+					<h:outputText value=" Nombre Item " />
+					<p:inputText id="inputTextnombre"
+						value="#{principalControlador.nombreProductoControlador}"
+						required="true"
+						requiredMessage="El campo 'Nombre Acuerdo' está vacío"
+						maxlength="50">
+						<p:keyFilter regEx="/^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ_-\s]+$/i"
+							preventPaste="false" />
+					</p:inputText>
+					<h:outputText value=" Cantidad " />
+					<p:inputText id="inputTextCantidad"
+						value="#{principalControlador.cantidadControlador}"
+						required="true"
+						requiredMessage="El campo 'Nombre Acuerdo' está vacío"
+						maxlength="50">
+						<p:keyFilter regEx="/^[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ_-\s]+$/i"
+							preventPaste="false" />
+					</p:inputText>
+					<h:outputText value=" Ubicación: " />
+					<p:selectOneMenu id="combListUbicacion"
+						value="#{principalControlador.ubicacionControlador}"
+						required="true" requiredMessage="Debe escojer una Ubicación">
+						<f:selectItem itemLabel="Seleccionar Ubicacion" />
+						<f:selectItems value="#{principalControlador.listaUbicacion}"
+							var="varUbicacion" itemLabel="#{varUbicacion}"
+							itemValue="#{varUbicacion}"></f:selectItems>
+					</p:selectOneMenu>
+					<h:outputText value=" Tipo Producto " />
+					<p:selectOneMenu id="combListTipoProducto"
+						value="#{principalControlador.tipoProductoControlador}"
+						required="true" requiredMessage="Debe escojer una Tipo Producto">
+						<f:selectItem itemLabel="Seleccionar Tipo Prod." />
+						<f:selectItems value="#{principalControlador.litaTipoProducto}"
+							var="varTipoProducto" itemLabel="#{varTipoProducto.nombreItem}"
+							itemValue="#{varTipoProducto.id}"></f:selectItems>
+					</p:selectOneMenu>
+				</h:panelGrid>
+			</div>
+			<h:panelGrid columns="2" border="0">
+				<p:commandButton id="guardarRegistroProducto" value="Guardar"
+					ajax="true"
+					actionListener="#{principalControlador.guardarProducto}"
+					oncomplete="PF('popCrearProducto').hide();"
+					update=":#{p:component('tblProducto')}" />
+				<p:commandButton id="cancelarRegistroProducto" value="Cancelar"
+					oncomplete="PF('popCrearProducto').hide();" />
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>
+</ui:composition>
